@@ -19,28 +19,33 @@ class _GroupPageState extends State<GroupPage> {
     List<String> groupName = userProvider.groupName;
     print(userProvider.groupName);
     int len = groupName.length;
-
-    return DefaultTabController(
-      length: len,
-      child: Scaffold(
-        appBar: AppBar(
-          bottom: TabBar(
-            tabs: groupName
-                .map((name) => Tab(
-                      text: name,
-                      height: 50,
-                    ))
-                .toList(),
+    if (len >= 1) {
+      return DefaultTabController(
+        length: len,
+        child: Scaffold(
+          appBar: AppBar(
+            bottom: TabBar(
+              tabs: groupName
+                  .map((name) => Tab(
+                        text: name,
+                        height: 50,
+                      ))
+                  .toList(),
+            ),
           ),
+          body: Builder(builder: (context) {
+            final tabController = DefaultTabController.of(context);
+            tabController.addListener(() {
+              setState(() {});
+            });
+            return GroupDetailPage(index: tabController.index);
+          }),
         ),
-        body: Builder(builder: (context) {
-          final tabController = DefaultTabController.of(context);
-          tabController.addListener(() {
-            setState(() {});
-          });
-          return GroupDetailPage(index: tabController.index);
-        }),
-      ),
-    );
+      );
+    } else {
+      return const Center(
+        child: Text('not in any group!'),
+      );
+    }
   }
 }

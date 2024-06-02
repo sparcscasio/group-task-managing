@@ -11,6 +11,7 @@ class TaskPage extends StatelessWidget {
     final userProvider = Provider.of<UserProvider>(context, listen: true);
     final List<DocumentReference> groupRef = userProvider.groupReference;
     final List<String> groupName = userProvider.groupName;
+    print(groupRef);
     return Scaffold(
       body: ListView.builder(
           itemCount: groupRef.length,

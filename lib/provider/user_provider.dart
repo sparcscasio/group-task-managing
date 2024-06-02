@@ -69,7 +69,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addGroup(String groupID) async {
+  addGroup(String groupID) async {
     try {
       DocumentReference userRef =
           FirebaseFirestore.instance.collection('user').doc(user!.uid);
@@ -98,14 +98,13 @@ class UserProvider with ChangeNotifier {
       try {
         groupData['userinfo'][user!.uid] = name;
       } catch (error) {
-        groupData['user'] = {user!.uid: name};
+        groupData['userinfo'] = {user!.uid: name};
       }
 
       groupRef.set(groupData);
       notifyListeners();
-    } catch (error, stackTrace) {
+    } catch (error) {
       print(error);
-      print(stackTrace);
     }
   }
 
