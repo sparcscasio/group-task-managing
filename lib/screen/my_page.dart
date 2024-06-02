@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:group_task_manager/provider/user_provider.dart';
-import 'package:group_task_manager/widget/add_group_button.dart';
+import 'package:group_task_manager/widget/group_managing_button.dart';
 import 'package:group_task_manager/widget/editable_text.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +29,7 @@ class MyPage extends StatelessWidget {
         Text(userProvider.groupName.join(', ')),
         addGroupButton(userProvider, context),
         SignOutButton(),
+        newGroupButton(userProvider, context),
       ],
     ));
   }

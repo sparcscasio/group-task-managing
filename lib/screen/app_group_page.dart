@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:group_task_manager/provider/user_provider.dart';
+import 'package:group_task_manager/service/group_service.dart';
 import 'package:group_task_manager/widget/editable_text.dart';
 import 'package:provider/provider.dart';
 
@@ -31,26 +32,6 @@ class AddGroupPage extends StatelessWidget {
         key: editableTextKey,
       ),
     ]);
-  }
-
-  Future<bool> checkGroup(String groupID) async {
-    try {
-      DocumentSnapshot document = await FirebaseFirestore.instance
-          .collection('group')
-          .doc(groupID)
-          .get();
-
-      return document.exists;
-    } catch (e) {
-      print("Error checking document existence: $e");
-      return false;
-    }
-  }
-
-  checkAgain(String groupID, UserProvider userProvider) {
-    DocumentReference ref =
-        FirebaseFirestore.instance.collection('group').doc(groupID);
-    return (userProvider.groupReference.contains(ref));
   }
 
   void validation(
