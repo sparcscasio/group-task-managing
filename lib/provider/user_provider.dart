@@ -12,6 +12,11 @@ class UserProvider with ChangeNotifier {
 
   UserProvider({this.user});
 
+  void setUser() {
+    updateUser();
+    setGroup();
+  }
+
   void getUser() {
     user = FirebaseAuth.instance.currentUser!;
     updateUser();
@@ -111,6 +116,26 @@ class UserProvider with ChangeNotifier {
       groupReference.add(reference);
       groupName.add(value);
     });
+    notifyListeners();
+  }
+
+  void changeName(String newname) async {
+    name = newname;
+    DocumentReference userRef =
+        FirebaseFirestore.instance.collection('user').doc(user!.uid);
+    DocumentSnapshot userSnapshot = await userRef.get();
+    Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
+    userData['name'] = newname;
+    userRef.set(userData);
+
+    for (var ref in groupReference) {
+      print(ref);
+      DocumentSnapshot snapshot = await ref.get();
+      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+      data['userinfo'][user!.uid] = newname;
+      ref.set(data);
+    }
+
     notifyListeners();
   }
 }

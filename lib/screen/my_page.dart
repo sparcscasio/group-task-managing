@@ -2,11 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:group_task_manager/provider/user_provider.dart';
+import 'package:group_task_manager/widget/editable_text.dart';
 import 'package:provider/provider.dart';
 
 class MyPage extends StatelessWidget {
-  const MyPage({super.key});
-
+  MyPage({super.key});
+  final GlobalKey<EditableTextWidgetState> editableTextKey =
+      GlobalKey<EditableTextWidgetState>();
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: true);
@@ -15,12 +17,14 @@ class MyPage extends StatelessWidget {
     return Center(
         child: Column(
       children: [
-        Text('${userProvider.name}}'),
-        TextButton(
-            onPressed: () {
-              userProvider.addGroup('NNiZiDgU2ve3lH5jBO0c');
-            },
-            child: Text('add group')),
+        EditableTextWidget(
+          key: editableTextKey,
+          defaultText: userProvider.name ?? '',
+          onButtonPressed: () {
+            userProvider.changeName(
+                editableTextKey.currentState?.currentTextGetter() ?? '');
+          },
+        ),
         SignOutButton(),
       ],
     ));

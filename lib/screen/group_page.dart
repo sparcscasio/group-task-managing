@@ -17,6 +17,7 @@ class _GroupPageState extends State<GroupPage> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: true);
     List<String> groupName = userProvider.groupName;
+    print(userProvider.groupName);
     int len = groupName.length;
 
     return DefaultTabController(

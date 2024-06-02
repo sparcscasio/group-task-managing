@@ -17,10 +17,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     // 사용자 정보 가져오기
-    Provider.of<UserProvider>(context, listen: false).getUser();
     Provider.of<UserProvider>(context, listen: false).updateUser();
+    Provider.of<UserProvider>(context, listen: false).setUser();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
