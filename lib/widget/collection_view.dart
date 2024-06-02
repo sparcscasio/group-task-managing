@@ -1,8 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:group_task_manager/provider/user_provider.dart';
+import 'package:group_task_manager/screen/todo_detail.dart';
+import 'package:group_task_manager/widget/bottom_dialog.dart';
 import 'package:group_task_manager/widget/color_info.dart';
+import 'package:provider/provider.dart';
 
-Widget collectionView(CollectionReference collectionReference) {
+Widget collectionView(CollectionReference collectionReference, String page,
+    BuildContext context) {
+  final userProvider = Provider.of<UserProvider>(context, listen: true);
+  print(userProvider.user!.uid);
   return StreamBuilder(
     stream: collectionReference.snapshots(),
     builder: (context, snapshot) {
@@ -12,12 +19,37 @@ Widget collectionView(CollectionReference collectionReference) {
         return Text('Error: ${snapshot.error}'); // 에러가 발생하면 에러 메시지를 반환
       } else {
         List<Map<String, dynamic>> dataList = [];
-        snapshot.data?.docs.forEach((doc) {
-          dataList.add(doc.data() as Map<String, dynamic>);
-        });
+        if (page == 'group') {
+          snapshot.data?.docs.forEach((doc) {
+            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+            data['reference'] = doc.reference;
+            dataList.add(doc.data() as Map<String, dynamic>);
+          });
+        } else {
+          if (page == 'task') {
+            snapshot.data?.docs.forEach((doc) {
+              Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+              data['reference'] = doc.reference;
+              if (data['worker'].contains(userProvider.user!.uid)) {
+                dataList.add(data);
+              }
+            });
+          } else {
+            snapshot.data?.docs.forEach((doc) {
+              Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+              data['reference'] = doc.reference;
+              if (data['manager'] == userProvider.user!.uid) {
+                dataList.add(data);
+              }
+            });
+          }
+        }
         if (dataList.isEmpty) {
           return const Center(
-            child: Text('nothing to do!'),
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('nothing to do!'),
+            ),
           );
         } else {
           return ListView.separated(
@@ -28,7 +60,15 @@ Widget collectionView(CollectionReference collectionReference) {
                 leading: stateView(dataList[index]['state']),
                 title: Text(dataList[index]['name']),
                 subtitle: Text(dataList[index]['memo']),
-                onTap: () {},
+                onTap: () {
+                  BottomDialog(
+                    context,
+                    ToDoDetialPage(
+                      data: dataList[index],
+                      userProvider: userProvider,
+                    ),
+                  );
+                },
               );
             },
             separatorBuilder: (context, index) {

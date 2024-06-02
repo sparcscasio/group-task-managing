@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ class UserProvider with ChangeNotifier {
 
   List<DocumentReference> groupReference = [];
   List<String> groupName = [];
+  Map<String, String> userInfo = {};
 
   UserProvider({this.user});
 
@@ -79,6 +82,9 @@ class UserProvider with ChangeNotifier {
       Map<String, dynamic> groupData =
           groupSnapshot.data() as Map<String, dynamic>;
       String groupname = groupData['name'];
+      Map<String, String> _userInfo =
+          Map<String, String>.from(groupData['userinfo']);
+      userInfo = {...userInfo, ..._userInfo};
 
       try {
         userData['group'][groupID] = groupname;
@@ -110,11 +116,16 @@ class UserProvider with ChangeNotifier {
     Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
     groupReference = [];
     groupName = [];
-    userData['group'].forEach((key, value) {
+    userData['group'].forEach((key, value) async {
       DocumentReference reference =
           FirebaseFirestore.instance.collection('group').doc(key);
       groupReference.add(reference);
       groupName.add(value);
+      DocumentSnapshot groupSnapshot = await reference.get();
+      Map<String, dynamic> data = groupSnapshot.data() as Map<String, dynamic>;
+      Map<String, String> _userInfo =
+          Map<String, String>.from(data['userinfo']);
+      userInfo = {...userInfo, ..._userInfo};
     });
     notifyListeners();
   }
