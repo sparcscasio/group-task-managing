@@ -24,6 +24,8 @@ class GroupDetailPage extends StatelessWidget {
               AddTaskPage(
                 groupID: groupref.id,
                 userProvider: userProvider,
+                data: null,
+                type: 'add',
               ));
         },
       ),

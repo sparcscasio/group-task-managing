@@ -6,12 +6,14 @@ class NameStack extends StatefulWidget {
   final UserProvider userProvider;
   final DocumentReference groupRef;
   final String type;
+  final oldData;
 
   const NameStack({
     Key? key,
     required this.userProvider,
     required this.groupRef,
     required this.type,
+    this.oldData,
   }) : super(key: key);
 
   @override
@@ -25,12 +27,16 @@ class NameStackState extends State<NameStack> {
   late String type;
   int selectedIndex = 0;
   late List<String> names = [];
+  late var oldData;
+  late bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    isLoading = true;
     groupRef = widget.groupRef;
     type = widget.type;
+    oldData = widget.oldData;
     fetchData();
   }
 
@@ -40,7 +46,27 @@ class NameStackState extends State<NameStack> {
     setState(() {
       userinfo = Map<String, String>.from(data['userinfo']);
       indexList = List<bool>.filled(userinfo.length, false);
+      _initializeSelection();
+      isLoading = false;
     });
+  }
+
+  void _initializeSelection() {
+    List<String> keys = userinfo.keys.toList();
+
+    if (type == 'worker' && oldData != null) {
+      for (var id in oldData) {
+        int target = keys.indexOf(id);
+        if (target != -1) {
+          indexList[target] = true;
+        }
+      }
+    } else if (type == 'manager' && oldData != null) {
+      int target = keys.indexOf(oldData);
+      if (target != -1) {
+        selectedIndex = target;
+      }
+    }
   }
 
   nameGetter() {
@@ -63,6 +89,11 @@ class NameStackState extends State<NameStack> {
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     names = userinfo.values.toList();
     return Expanded(
       child: Padding(

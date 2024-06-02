@@ -3,19 +3,29 @@
 import 'package:flutter/material.dart';
 
 class DatePicker extends StatefulWidget {
-  const DatePicker({super.key});
+  DateTime? duedate;
+
+  DatePicker({super.key, this.duedate});
 
   @override
   DatePickerState createState() => DatePickerState();
 }
 
 class DatePickerState extends State<DatePicker> {
-  DateTime? selectedDate = null;
+  late DateTime? duedate;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    duedate = widget.duedate;
+  }
+
+  DateTime? selectedDate;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: duedate,
       firstDate: DateTime(2015, 8),
       lastDate: DateTime(2101),
     );

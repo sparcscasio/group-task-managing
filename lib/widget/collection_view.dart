@@ -23,7 +23,7 @@ Widget collectionView(CollectionReference collectionReference, String page,
           snapshot.data?.docs.forEach((doc) {
             Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
             data['reference'] = doc.reference;
-            dataList.add(doc.data() as Map<String, dynamic>);
+            dataList.add(data);
           });
         } else {
           if (page == 'task') {

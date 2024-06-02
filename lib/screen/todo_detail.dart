@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:group_task_manager/provider/user_provider.dart';
+import 'package:group_task_manager/screen/add_task_page.dart';
+import 'package:group_task_manager/service/documnet_service.dart';
+import 'package:group_task_manager/widget/bottom_dialog.dart';
 import 'package:provider/provider.dart';
 
 class ToDoDetialPage extends StatelessWidget {
@@ -17,6 +20,9 @@ class ToDoDetialPage extends StatelessWidget {
         Text('${data['name'] ?? ''}'),
         Text(returnMatchingName(userInfo, data['manager'].toString())),
         workerGetter(userInfo, data['worker'] ?? List.empty()),
+        deleteButton(data['reference'], context),
+        updateButton(data['reference'].toString().split('/')[1], userProvider,
+            'update', data, context),
       ],
     );
   }
@@ -35,5 +41,30 @@ class ToDoDetialPage extends StatelessWidget {
         workerList.map((e) => returnMatchingName(userInfo, e)).toList();
     String nameString = workername.join(', ');
     return Text(nameString);
+  }
+
+  Widget deleteButton(DocumentReference ref, BuildContext context) {
+    return TextButton(
+        onPressed: () {
+          ref.delete();
+          Navigator.pop(context);
+        },
+        child: Text('delete'));
+  }
+
+  Widget updateButton(String groupID, UserProvider userProvider, String type,
+      Map<String, dynamic> data, BuildContext context) {
+    return TextButton(
+        onPressed: () {
+          BottomDialog(
+              context,
+              AddTaskPage(
+                userProvider: userProvider,
+                type: 'update',
+                data: data,
+                groupID: groupID,
+              ));
+        },
+        child: Text('add'));
   }
 }
