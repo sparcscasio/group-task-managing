@@ -13,6 +13,7 @@ BottomDialog(BuildContext context, Widget contents) {
                   topLeft: Radius.circular(10), // 모달 좌상단 라운딩 처리
                   topRight: Radius.circular(10), // 모달 우상단 라운딩 처리
                 )),
-            child: contents);
+            child: contents,
+            );
       });
 }

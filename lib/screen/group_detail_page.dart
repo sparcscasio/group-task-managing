@@ -19,7 +19,12 @@ class GroupDetailPage extends StatelessWidget {
       floatingActionButton: IconButton(
         icon: const Icon(Icons.add),
         onPressed: () {
-          BottomDialog(context, AddTaskPage(groupID: groupref.id));
+          BottomDialog(
+              context,
+              AddTaskPage(
+                groupID: groupref.id,
+                userProvider: userProvider,
+              ));
         },
       ),
     );
