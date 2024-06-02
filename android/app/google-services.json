@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "89192077781",
+    "project_id": "group-task-manager-bf21e",
+    "storage_bucket": "group-task-manager-bf21e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89192077781:android:1d5c2239622922981d055c",
+        "android_client_info": {
+          "package_name": "com.example.group_task_manager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOhNqlLJcaKJrVv2Qda2yAMopUy7ZD7EQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
