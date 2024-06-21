@@ -104,7 +104,7 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  void setGroup() async {
+  Future<void> setGroup() async {
     Map<String, dynamic> userData = await getDatabyID(user!.uid, 'user');
     groupReference = [];
     groupName = [];
