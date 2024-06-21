@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:group_task_manager/provider/user_provider.dart';
+import 'package:group_task_manager/screen/manage_page.dart';
 import 'package:group_task_manager/screen/todo_detail.dart';
 import 'package:group_task_manager/widget/bottom_dialog.dart';
 import 'package:group_task_manager/widget/color_info.dart';
+import 'package:group_task_manager/widget/task_tile.dart';
 import 'package:provider/provider.dart';
 
 Widget collectionView(CollectionReference collectionReference, String page,
@@ -56,20 +58,11 @@ Widget collectionView(CollectionReference collectionReference, String page,
             shrinkWrap: true,
             itemCount: dataList.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                leading: stateView(dataList[index]['state']),
-                title: Text(dataList[index]['name']),
-                subtitle: Text(dataList[index]['memo']),
-                onTap: () {
-                  BottomDialog(
-                    context,
-                    ToDoDetialPage(
-                      data: dataList[index],
-                      userProvider: userProvider,
-                    ),
-                  );
-                },
-              );
+              if (page == 'task') {
+                return TaskTile(dataList[index], userProvider, context);
+              } else {
+                return ManageTile(dataList[index], userProvider, context);
+              }
             },
             separatorBuilder: (context, index) {
               return const Divider(
@@ -81,13 +74,5 @@ Widget collectionView(CollectionReference collectionReference, String page,
         }
       }
     },
-  );
-}
-
-Widget stateView(int state) {
-  Color color = ColorInfo[state]!;
-  return Icon(
-    Icons.adjust,
-    color: color,
   );
 }

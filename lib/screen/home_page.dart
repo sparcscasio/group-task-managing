@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:group_task_manager/provider/user_provider.dart';
 import 'package:group_task_manager/screen/group_page.dart';
+import 'package:group_task_manager/screen/manage_page.dart';
 import 'package:group_task_manager/screen/my_page.dart';
 import 'package:group_task_manager/screen/task_page.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Provider.of<UserProvider>(context, listen: false).updateUser();
     Provider.of<UserProvider>(context, listen: false).setUser();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +50,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _currentIndex = 0;
   // 페이지 리스트
-  final List<Widget> _pages = [TaskPage(), GroupPage(), MyPage()];
+  final List<Widget> _pages = [TaskPage(), ManagePage(), GroupPage(), MyPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +60,7 @@ class _HomeViewState extends State<HomeView> {
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {

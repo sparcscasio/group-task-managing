@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:group_task_manager/provider/user_provider.dart';
+import 'package:group_task_manager/service/filter_service.dart';
 import 'package:group_task_manager/widget/collection_view.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,7 @@ class _ManagePageState extends State<ManagePage> {
             CollectionReference todoRef = groupRef[index].collection('todo');
             return ExpansionTile(
               title: Text(groupName[index]),
-              children: [collectionView(todoRef, 'task', context)],
+              children: [collectionView(todoRef, 'manage', context)],
             );
           })),
     );
