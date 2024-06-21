@@ -21,7 +21,7 @@ class GroupDetailPage extends StatelessWidget {
         onPressed: () {
           BottomDialog(
               context,
-              AddTaskPage(
+              EditTaskPage(
                 groupID: groupref.id,
                 userProvider: userProvider,
                 data: null,

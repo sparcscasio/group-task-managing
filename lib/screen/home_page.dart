@@ -71,6 +71,10 @@ class _HomeViewState extends State<HomeView> {
             label: 'task',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.task),
+            label: 'manage',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.people),
             label: 'group',
           ),

@@ -58,13 +58,13 @@ class ToDoDetialPage extends StatelessWidget {
         onPressed: () {
           BottomDialog(
               context,
-              AddTaskPage(
+              EditTaskPage(
                 userProvider: userProvider,
                 type: 'update',
                 data: data,
                 groupID: groupID,
               ));
         },
-        child: Text('add'));
+        child: Text('edit'));
   }
 }

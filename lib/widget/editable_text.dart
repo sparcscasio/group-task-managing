@@ -1,6 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class EditableTextWidget extends StatefulWidget {
   final String defaultText;
@@ -46,27 +48,43 @@ class EditableTextWidgetState extends State<EditableTextWidget> {
     });
   }
 
+  void save() {
+    setState(() {
+      currentText = _controller.text;
+      isEditing = false;
+    });
+  }
+
   String currentTextGetter() {
     return currentText ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        isEditing // 조건부 렌더링
-            ? TextField(
-                controller: _controller,
-                autofocus: true,
-                onSubmitted: (value) {
-                  setState(() {
-                    isEditing = false;
-                  });
-                },
-              )
-            : Text(_controller.text.isEmpty ? 'Tap to edit' : _controller.text),
-        const SizedBox(height: 20),
+        Expanded(
+          child: isEditing // 조건부 렌더링
+              ? Padding(
+                  padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
+                  child: TextField(
+                    controller: _controller,
+                    autofocus: true,
+                    onSubmitted: (value) {
+                      setState(() {
+                        isEditing = false;
+                      });
+                    },
+                  ),
+                )
+              : Center(
+                  child: Text(_controller.text.isEmpty
+                      ? 'Tap to edit'
+                      : _controller.text),
+                ),
+        ),
+        const SizedBox(width: 20),
         ElevatedButton(
           onPressed: toggleEditMode,
           child: Text(isEditing ? 'Save' : 'Edit'),

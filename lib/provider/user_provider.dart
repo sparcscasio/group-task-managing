@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:group_task_manager/service/documnet_service.dart';
 
 class UserProvider with ChangeNotifier {
   User? user;
@@ -59,11 +60,7 @@ class UserProvider with ChangeNotifier {
         print("Error writing document: $e");
       }
     } else {
-      DocumentReference userRef =
-          FirebaseFirestore.instance.collection('user').doc(user!.uid);
-      DocumentSnapshot userSnapshot = await userRef.get();
-      Map<String, dynamic> userData =
-          userSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> userData = await getDatabyID(user!.uid, 'user');
       name = userData['name'];
     }
     notifyListeners();
@@ -73,17 +70,16 @@ class UserProvider with ChangeNotifier {
     try {
       DocumentReference userRef =
           FirebaseFirestore.instance.collection('user').doc(user!.uid);
-      DocumentSnapshot userSnapshot = await userRef.get();
-      Map<String, dynamic> userData =
-          userSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> userData = await getDatabyReference(userRef);
+
       DocumentReference groupRef =
           FirebaseFirestore.instance.collection('group').doc(groupID);
-      DocumentSnapshot groupSnapshot = await groupRef.get();
-      Map<String, dynamic> groupData =
-          groupSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> groupData = await getDatabyReference(groupRef);
+
       String groupname = groupData['name'];
       Map<String, String> _userInfo =
           Map<String, String>.from(groupData['userinfo']);
+
       userInfo = {...userInfo, ..._userInfo};
 
       try {
@@ -109,10 +105,7 @@ class UserProvider with ChangeNotifier {
   }
 
   void setGroup() async {
-    DocumentReference userRef =
-        FirebaseFirestore.instance.collection('user').doc(user!.uid);
-    DocumentSnapshot userSnapshot = await userRef.get();
-    Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
+    Map<String, dynamic> userData = await getDatabyID(user!.uid, 'user');
     groupReference = [];
     groupName = [];
     userData['group'].forEach((key, value) async {
@@ -120,8 +113,7 @@ class UserProvider with ChangeNotifier {
           FirebaseFirestore.instance.collection('group').doc(key);
       groupReference.add(reference);
       groupName.add(value);
-      DocumentSnapshot groupSnapshot = await reference.get();
-      Map<String, dynamic> data = groupSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> data = await getDatabyReference(reference);
       Map<String, String> _userInfo =
           Map<String, String>.from(data['userinfo']);
       userInfo = {...userInfo, ..._userInfo};
@@ -133,13 +125,11 @@ class UserProvider with ChangeNotifier {
     name = newname;
     DocumentReference userRef =
         FirebaseFirestore.instance.collection('user').doc(user!.uid);
-    DocumentSnapshot userSnapshot = await userRef.get();
-    Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
+    Map<String, dynamic> userData = await getDatabyReference(userRef);
     userData['name'] = newname;
     userRef.set(userData);
 
     for (var ref in groupReference) {
-      print(ref);
       DocumentSnapshot snapshot = await ref.get();
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
       data['userinfo'][user!.uid] = newname;

@@ -7,7 +7,7 @@ import 'package:group_task_manager/widget/editable_text.dart';
 import 'package:group_task_manager/widget/name_stack.dart';
 import 'package:provider/provider.dart';
 
-class AddTaskPage extends StatelessWidget {
+class EditTaskPage extends StatelessWidget {
   late String? groupID;
   late UserProvider userProvider;
 
@@ -19,7 +19,7 @@ class AddTaskPage extends StatelessWidget {
   final GlobalKey<NameStackState> workerKey = GlobalKey<NameStackState>();
   final GlobalKey<NameStackState> managerKey = GlobalKey<NameStackState>();
 
-  AddTaskPage({
+  EditTaskPage({
     super.key,
     this.groupID,
     required this.userProvider,
@@ -87,8 +87,8 @@ class AddTaskPage extends StatelessWidget {
       ),
       ElevatedButton(
           onPressed: () {
-            editableTextKeyName.currentState?.toggleEditMode();
-            editableTextKeyMemo.currentState?.toggleEditMode();
+            editableTextKeyName.currentState?.save();
+            editableTextKeyMemo.currentState?.save();
             name = editableTextKeyName.currentState?.currentTextGetter() ?? '';
             memo = editableTextKeyMemo.currentState?.currentTextGetter() ?? '';
             date = datePicker.currentState?.dateGetter();
