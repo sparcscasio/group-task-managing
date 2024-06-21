@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:group_task_manager/provider/user_provider.dart';
 import 'package:group_task_manager/screen/todo_detail.dart';
+import 'package:group_task_manager/service/date_service.dart';
 import 'package:group_task_manager/service/documnet_service.dart';
 import 'package:group_task_manager/widget/bottom_dialog.dart';
 import 'package:group_task_manager/widget/color_info.dart';
@@ -21,6 +22,25 @@ TaskTile(Map<String, dynamic> data, UserProvider userProvider,
     title: Text(data['name']),
     subtitle: Text(data['memo']),
     trailing: TaskButton(data, context),
+    onTap: () {
+      BottomDialog(
+        context,
+        ToDoDetialPage(
+          data: data,
+          userProvider: userProvider,
+        ),
+      );
+    },
+  );
+}
+
+GroupTile(Map<String, dynamic> data, UserProvider userProvider,
+    BuildContext context) {
+  return ListTile(
+    leading: stateView(data['state']),
+    title: Text(data['name']),
+    subtitle: Text(data['memo']),
+    trailing: getDueDate(data['duedate']),
     onTap: () {
       BottomDialog(
         context,
@@ -64,7 +84,7 @@ ManagerButton(Map<String, dynamic> data, BuildContext context) {
         children: [
           IconButton(
               onPressed: () async {
-                await setTodoState(reference, 2, context);
+                await setTodoState(reference, 2);
               },
               icon: const Icon(
                 Icons.check,
@@ -72,7 +92,7 @@ ManagerButton(Map<String, dynamic> data, BuildContext context) {
               )),
           IconButton(
               onPressed: () async {
-                await setTodoState(reference, -1, context);
+                await setTodoState(reference, -1);
               },
               icon: const Icon(
                 Icons.close,
@@ -85,7 +105,7 @@ ManagerButton(Map<String, dynamic> data, BuildContext context) {
     if (state == -1) {
       return IconButton(
           onPressed: () async {
-            await setTodoState(reference, 2, context);
+            await setTodoState(reference, 2);
           },
           icon: const Icon(
             Icons.check,
@@ -93,11 +113,14 @@ ManagerButton(Map<String, dynamic> data, BuildContext context) {
           ));
     } else {
       if (state == 0) {
-        return Text('진행중');
+        return const Text(
+          '진행중',
+          style: TextStyle(fontSize: 15, color: Colors.grey),
+        );
       } else {
         return IconButton(
             onPressed: () async {
-              await setTodoState(reference, 0, context);
+              await setTodoState(reference, 0);
             },
             icon: const Icon(
               Icons.refresh,
@@ -114,7 +137,7 @@ TaskButton(Map<String, dynamic> data, BuildContext context) {
   if (state == 0 || state == -1) {
     return IconButton(
         onPressed: () async {
-          await setTodoState(reference, 1, context);
+          await setTodoState(reference, 1);
         },
         icon: const Icon(
           Icons.file_upload,
@@ -134,8 +157,7 @@ TaskButton(Map<String, dynamic> data, BuildContext context) {
   }
 }
 
-setTodoState(
-    DocumentReference reference, int state, BuildContext context) async {
+setTodoState(DocumentReference reference, int state) async {
   Map<String, dynamic> data = await getDatabyReference(reference);
   data['state'] = state;
   await reference.set(data);

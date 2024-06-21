@@ -46,6 +46,7 @@ class NameStackState extends State<NameStack> {
     setState(() {
       userinfo = Map<String, String>.from(data['userinfo']);
       indexList = List<bool>.filled(userinfo.length, false);
+      indexList[0] = true;
       _initializeSelection();
       isLoading = false;
     });

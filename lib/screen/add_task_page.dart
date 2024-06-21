@@ -57,56 +57,81 @@ class EditTaskPage extends StatelessWidget {
         .collection('group')
         .doc(groupID)
         .collection('todo');
-    return Column(children: [
-      EditableTextWidget(
-        defaultText: name,
-        onButtonPressed: () {},
-        key: editableTextKeyName,
-      ),
-      EditableTextWidget(
-        defaultText: memo,
-        onButtonPressed: () {},
-        key: editableTextKeyMemo,
-      ),
-      DatePicker(
-        key: datePicker,
-      ),
-      NameStack(
-        userProvider: userProvider,
-        groupRef: groupReference,
-        type: 'worker',
-        key: workerKey,
-        oldData: workerList,
-      ),
-      NameStack(
-        userProvider: userProvider,
-        groupRef: groupReference,
-        type: 'manager',
-        key: managerKey,
-        oldData: manager,
-      ),
-      ElevatedButton(
-          onPressed: () {
-            editableTextKeyName.currentState?.save();
-            editableTextKeyMemo.currentState?.save();
-            name = editableTextKeyName.currentState?.currentTextGetter() ?? '';
-            memo = editableTextKeyMemo.currentState?.currentTextGetter() ?? '';
-            date = datePicker.currentState?.dateGetter();
-            workerList = workerKey.currentState?.nameGetter();
-            manager = managerKey.currentState?.nameGetter();
-            Map<String, Object?> newData = {
-              'name': name,
-              'memo': memo,
-              'duedate': date,
-              'worker': workerList,
-              'manager': manager,
-              'state': 0,
-            };
-            serverAction(todoReference, newData);
-            //Navigator.pop(context);
-          },
-          child: Text('save'))
-    ]);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(children: [
+        EditableTextWidget(
+          defaultText: name,
+          onButtonPressed: () {},
+          key: editableTextKeyName,
+        ),
+        EditableTextWidget(
+          defaultText: memo,
+          onButtonPressed: () {},
+          key: editableTextKeyMemo,
+        ),
+        DatePicker(
+          key: datePicker,
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        const Text(
+          'Worker',
+          style: TextStyle(
+              fontSize: 15,
+              color: Colors.deepPurple,
+              fontWeight: FontWeight.w600),
+        ),
+        NameStack(
+          userProvider: userProvider,
+          groupRef: groupReference,
+          type: 'worker',
+          key: workerKey,
+          oldData: workerList,
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        const Text(
+          'Manager',
+          style: TextStyle(
+              fontSize: 15,
+              color: Colors.deepPurple,
+              fontWeight: FontWeight.w600),
+        ),
+        NameStack(
+          userProvider: userProvider,
+          groupRef: groupReference,
+          type: 'manager',
+          key: managerKey,
+          oldData: manager,
+        ),
+        ElevatedButton(
+            onPressed: () {
+              editableTextKeyName.currentState?.save();
+              editableTextKeyMemo.currentState?.save();
+              name =
+                  editableTextKeyName.currentState?.currentTextGetter() ?? '';
+              memo =
+                  editableTextKeyMemo.currentState?.currentTextGetter() ?? '';
+              date = datePicker.currentState?.dateGetter();
+              workerList = workerKey.currentState?.nameGetter();
+              manager = managerKey.currentState?.nameGetter();
+              Map<String, Object?> newData = {
+                'name': name,
+                'memo': memo,
+                'duedate': date,
+                'worker': workerList,
+                'manager': manager,
+                'state': 0,
+              };
+              serverAction(todoReference, newData);
+              //Navigator.pop(context);
+            },
+            child: Text('save'))
+      ]),
+    );
   }
 
   serverAction(
