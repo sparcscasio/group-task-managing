@@ -17,39 +17,81 @@ class MyPage extends StatelessWidget {
     final userProvider = Provider.of<UserProvider>(context, listen: true);
     User? user = userProvider.user;
     int state = userProvider.state;
-    return Center(
-        child: Column(
-      children: [
-        EditableTextWidget(
-          key: editableTextKey,
-          defaultText: userProvider.name ?? '',
-          onButtonPressed: () {
-            userProvider.changeName(
-                editableTextKey.currentState?.currentTextGetter() ?? '');
-          },
-        ),
-        GroupNameGetter(userProvider),
-        addGroupButton(userProvider, context),
-        SignOutButton(),
-        newGroupButton(userProvider, context),
-      ],
-    ));
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SingleChildScrollView(
+        child: Center(
+            child: Column(
+          children: [
+            const Text(
+              'user profile',
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.deepPurple),
+            ),
+            EditableTextWidget(
+              key: editableTextKey,
+              defaultText: userProvider.name ?? '',
+              onButtonPressed: () {
+                userProvider.changeName(
+                    editableTextKey.currentState?.currentTextGetter() ?? '');
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const SignOutButton(),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 243, 221, 247),
+                  borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Groups',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.deepPurple),
+                    ),
+                    GroupNameGetter(userProvider),
+                    addGroupButton(userProvider, context),
+                    newGroupButton(userProvider, context),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        )),
+      ),
+    );
   }
 }
 
 GroupNameGetter(UserProvider userProvider) {
   return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: userProvider.groupName.length,
       itemBuilder: (context, index) {
         String name = userProvider.groupName[index];
         DocumentReference ref = userProvider.groupReference[index];
         return ListTile(
-          title: Text(name),
+          title: Center(
+              child: Text(
+            name,
+            style: const TextStyle(fontSize: 15, color: Colors.deepPurple),
+          )),
           trailing: IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () async {
-              print('delete group');
               await DeleteGroup(ref, userProvider);
             },
           ),

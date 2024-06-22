@@ -58,10 +58,10 @@ Widget collectionView(CollectionReference collectionReference, String page,
             shrinkWrap: true,
             itemCount: dataList.length,
             itemBuilder: (context, index) {
-              if (page == 'task') {
+              if (page == 'manage') {
                 return ManageTile(dataList[index], userProvider, context);
               }
-              if (page == 'manage') {
+              if (page == 'task') {
                 return TaskTile(dataList[index], userProvider, context);
               } else {
                 return GroupTile(dataList[index], userProvider, context);

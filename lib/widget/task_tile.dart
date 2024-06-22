@@ -83,6 +83,7 @@ ManagerButton(Map<String, dynamic> data, BuildContext context) {
       child: Row(
         children: [
           IconButton(
+              padding: const EdgeInsets.all(0),
               onPressed: () async {
                 await setTodoState(reference, 2);
               },
@@ -91,6 +92,7 @@ ManagerButton(Map<String, dynamic> data, BuildContext context) {
                 color: Colors.green,
               )),
           IconButton(
+              padding: const EdgeInsets.all(0),
               onPressed: () async {
                 await setTodoState(reference, -1);
               },
@@ -104,6 +106,7 @@ ManagerButton(Map<String, dynamic> data, BuildContext context) {
   } else {
     if (state == -1) {
       return IconButton(
+          padding: const EdgeInsets.all(0),
           onPressed: () async {
             await setTodoState(reference, 2);
           },
@@ -119,6 +122,7 @@ ManagerButton(Map<String, dynamic> data, BuildContext context) {
         );
       } else {
         return IconButton(
+            padding: const EdgeInsets.all(0),
             onPressed: () async {
               await setTodoState(reference, 0);
             },
@@ -136,6 +140,7 @@ TaskButton(Map<String, dynamic> data, BuildContext context) {
   DocumentReference reference = data['reference'];
   if (state == 0 || state == -1) {
     return IconButton(
+        padding: const EdgeInsets.all(0),
         onPressed: () async {
           await setTodoState(reference, 1);
         },

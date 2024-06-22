@@ -7,6 +7,7 @@ import 'package:group_task_manager/service/group_service.dart';
 import 'package:group_task_manager/widget/editable_text.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class AddGroupPage extends StatelessWidget {
   final GlobalKey<EditableTextWidgetState> editableTextKey =
       GlobalKey<EditableTextWidgetState>();
